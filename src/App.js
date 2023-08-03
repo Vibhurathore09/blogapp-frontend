@@ -1,23 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
-
+import Topbar from "./components/topbar/Topbar";
+import Home from "./pages/home/Home";
+// import SinglePost from "./components/singlePost/SinglePost";
+import Single from "./pages/Single/Single";
+import Write from "./pages/write/Write";
+import Settings from "./pages/setting/Settings";
+import Login from "./pages/login/Login";
+import Register from "./pages/register/Register";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { useContext } from "react";
+import { Context } from "./context/Context";
 function App() {
+  const {user} = useContext(Context);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Topbar />
+        <Routes>
+          <Route
+            path="/"
+            element={user ? <Home /> : <Navigate to="/register" replace />}
+          />
+          <Route
+            path="register"
+            element={!user ? <Register /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="login"
+            element={!user ? <Login /> : <Navigate to="/" replace />}
+          />
+
+          {/* <Route path="/single" element={<Single />} /> */}
+          <Route
+            path="write"
+            element={user ? <Write /> : <Navigate to="/register" replace />}
+          />
+          <Route path="write" element={<Write />} />
+          <Route
+            path="settigs"
+            elemt={user ? <Settings /> : <Navigate to="register" replace />}
+          />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Register" element={<Register />} />
+          <Route path="/post/:postId" element={<Single />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
